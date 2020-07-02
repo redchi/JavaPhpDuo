@@ -1,5 +1,5 @@
 <?php
-
+include_once "./JavaSide/src/ConsoleDemo/php/ControllerCD.php";
 
     $timezone = "Asia/Colombo";
     date_default_timezone_set($timezone);
@@ -10,12 +10,13 @@
 //     fclose($fp); 
 
     echo "got ".print_r($_POST);
-    $_POST = array();
+   
     
 
     $urlParams = $_GET["requestParam"];
     $requests = explode("/", $urlParams);
     $requests = array_map("strtolower", $requests);
+    $controller = new ControllerCD();
     if($requests[0] =="connect"){
         $port = 20222;
        echo "<br><br> trying to connect to java server<br>
@@ -32,6 +33,23 @@
         $respJson = json_encode($responceArray);
         echo $respJson;
     }
+    else if($requests[0]=="consoledemo" && count($requests)==1){
+        $controller->displayView();
+    }
+    else if($requests[0]=="consoledemo" && count($requests)==2 && $requests[1]=="update"){
+        $controller->getUpdateNumber();
+    }
+    else if($requests[0]=="console" && count($requests)==1 ){
+        $controller->displayConsoleView();
+    }
+    else if($requests[0]=="console" && $requests[1]=="externalcommand"  && count($requests)==2){
+        ob_end_clean();
+        $cmd = $_POST["command"];
+        $controller->javaServerConnect($cmd,1111);
+    }
+    
+    
+    
    
 
 
@@ -58,7 +76,7 @@
         
     }
     
-    
+    $_POST = array();
     
     
     
