@@ -82,7 +82,9 @@ Class ControllerCD{
                     $pos = (int)$linebreakPos;
                   //  $pos = $pos - $count;
            //         echo "replaced pos ".$linebreakPos;
-                    $responceString = substr_replace($responceString, "\n", $pos, 0);
+                    $responceString[$pos]="\n";
+                    
+               //     $responceString = substr_replace($responceString, "\n", $pos, 0);
                     //$count = $count + 1;
                 }
               
@@ -151,14 +153,11 @@ html,
 body {
   min-height: 100%;
 }
-h2{
-  color:#fffcfc;
-   padding-left: 0.5em;
-}
-body {
-  background-color: #525252;
-  
 
+body {
+  background-color: #202020;
+
+  color: #f2f2f2;
   /*padding: 0.5em 1em;*/
   -webkit-font-smoothing: antialiased;
 }
@@ -169,14 +168,14 @@ body {
   color: #fff;
   width: calc(100% - 3em);
   max-width: 100%;
-  max-height: calc(100% - 3em);
+  max-height: calc(75%);
   overflow-y: auto;
   margin: 1em 1em;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 0.5em;
-  box-shadow: 0 0.75em 3em rgba(50, 50, 50, 0.5);
+  box-shadow: 0 0.75em 3em rgba(1, 1, 1, 0.2);
   z-index: 100;
   line-height: 1.5;
 }
@@ -263,7 +262,10 @@ body {
 }
 </style>
 </head>
-<body translate="no">
+<div id="div1" style="display:none;background-color:#202020;">
+<body id="particles-js">
+
+
 <body id="particles-js">
 <h2> External java console</h2>
 <div class=\'console\'>
@@ -273,7 +275,11 @@ body {
 <div class=\'output-cmd\'><textarea autofocus class=\'console-input\' placeholder="Type command..."></textarea></div>
 </div>
 </div>
+ 
 </body>
+</div>
+
+
 <script src=\'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js\'></script>
 <script src=\'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.1.0/markdown-it.min.js\'></script>
 <script src=\'https://cdnjs.cloudflare.com/ajax/libs/autosize.js/3.0.18/autosize.min.js\'></script>
@@ -281,10 +287,20 @@ body {
 <script src=\'https://s.codepen.io/assets/libs/modernizr.js\'></script>
 <script src=\'https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js\'></script>
 <script id="rendered-js">
-// Output Welcome message
-//output(\'Original console design by Matt Cowley https://codepen.io/MattCowley/pen/jqBbdG/\')
-//output(\'\')
-output(\'Welcome to example console program.\')
+
+
+
+
+$(document).ready(function(){
+  $("#div1").fadeIn(6000);
+  $(\'body\').hide().fadeIn(5000);
+
+});
+
+intro();
+function intro(){
+output(\'Experimental Kanemoke External Console\');
+}
 
 // User Commands
 function echo (...a) {
@@ -303,7 +319,8 @@ var cmds = {
  */
 
 function clear () {
-  $("#outputs").html("")
+  $("#outputs").html("");
+    intro();
 }
 clear.usage = "clear"
 clear.doc = "Clears the terminal screen"
@@ -419,10 +436,12 @@ function processCommand(cmd){
 		var params = \'command=\'+cmd;
 		request.send(params);
 	}
+particlesJS(\'particles-js\',{\'particles\':{\'number\':{\'value\':50},\'color\':{\'value\':\'#ffffff\'},\'shape\':{\'type\':\'triangle\',\'polygon\':{\'nb_sides\':5}},\'opacity\':{\'value\':0.06,\'random\':false},\'size\':{\'value\':11,\'random\':true},\'line_linked\':{\'enable\':true,\'distance\':150,\'color\':\'#ffffff\',\'opacity\':0.4,\'width\':1},\'move\':{\'enable\':true,\'speed\':4,\'direction\':\'none\',\'random\':false,\'straight\':false,\'out_mode\':\'out\',\'bounce\':false}},\'interactivity\':{\'detect_on\':\'canvas\',\'events\':{\'onhover\':{\'enable\':false},\'onclick\':{\'enable\':true,\'mode\':\'push\'},\'resize\':true},\'modes\':{\'push\':{\'particles_nb\':4}}},\'retina_detect\':true},function(){});
 
     </script>
 </body>
 </html>
+
 
 ';
     }

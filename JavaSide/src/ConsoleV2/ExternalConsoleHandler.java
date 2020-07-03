@@ -54,7 +54,7 @@ public class ExternalConsoleHandler {
 	        }
 		}
 		catch(Exception e) {
-			 System.out.println("Error:1");
+			 System.out.println("Error: 1");
 		}
 	       
 	}
@@ -80,9 +80,13 @@ public class ExternalConsoleHandler {
 	               BufferedReader br =    new BufferedReader(new InputStreamReader(sock.getInputStream()));
 	               BufferedWriter bw =    new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 	               String line = "";
+	               String ip = sock.getRemoteSocketAddress().toString().replace("/", "");
 	               boolean stop = false;
 	               while (stop == false && ((line = br.readLine()) != null)) {
 	            	   String trueCommand = validate(line);
+	                   Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+	            	   System.out.println("\n<Remote Command from "+ip+" at "+timestamp+">\n"+trueCommand);
 	            	   String reply = processRequest(trueCommand);
 	            	//   String next = br.readLine();
 	            	//   System.out.println("lding next");
@@ -112,7 +116,7 @@ public class ExternalConsoleHandler {
 	}
 	
 	private String validate(String clientCommand) {
-		System.out.println("x1");
+		//System.out.println("x1");
 //		String breaks = "\r";
 //    	int index = clientCommand.indexOf(breaks);
 //    	while (index >= 0) {
@@ -122,9 +126,9 @@ public class ExternalConsoleHandler {
 //		clientCommand = clientCommand.replace("\n", "");
 //		clientCommand = clientCommand.replace("\r", "");
 //		clientCommand = clientCommand.replace("\0", "");
-		System.out.println("before - "+clientCommand);
+	//	System.out.println("before - "+clientCommand);
 		clientCommand = clientCommand.replaceAll("\\r|\\n", "");
-		System.out.println("after - "+clientCommand);
+		//System.out.println("after - "+clientCommand);
 
 
 		
@@ -158,10 +162,12 @@ public class ExternalConsoleHandler {
 		// Show what happened
 		//System.out.println("got - "+output);
 		//output = "safksdflk;f\nasdas";
-		String result  = makeJson(output);
 		
-		System.out.println(result);
-		System.out.println("#1");
+		System.out.println(output);
+		String result  = makeJson(output);
+	
+		//System.out.println(result);
+		//System.out.println("#1");
 		
 		return result;
 	}
@@ -174,7 +180,7 @@ public class ExternalConsoleHandler {
 		String breaks = "\n";
     	int index = responce.indexOf(breaks);
     	while (index >= 0) {
-    	       System.out.println("occurence at - "+index);
+    	      // System.out.println("occurence at - "+index);
     	       allLineBreaks = allLineBreaks + index+",";
     	       index = responce.indexOf(breaks, index + 1);
     	}
@@ -182,8 +188,7 @@ public class ExternalConsoleHandler {
     	// replace linebreaks
     	
     	//String replacedResponce = responce.replace("\n", "");
-    	String replacedResponce =  responce.replaceAll("\\r", "").replaceAll("\\n", " ");
-  
+    	String replacedResponce =  responce.replaceAll("\\r", " ").replaceAll("\\n", " ");
     //	System.out.println("z1"+replacedResponce);  
     	//System.out.println("z2"+replacedResponce);  
 		HashMap<String, String> map = new HashMap<String, String>() {{
@@ -195,7 +200,6 @@ public class ExternalConsoleHandler {
         String jsonBody = "{"+map.entrySet().stream()
         	    .map(e -> "\""+ e.getKey() + "\"" + ":\"" + String.valueOf(e.getValue()) + "\"")
         	    .collect(Collectors.joining(", "))+"}";
-	        
 	        return jsonBody;
 	}
 	
@@ -205,8 +209,9 @@ public class ExternalConsoleHandler {
 		switch(Request) {
 		case "help":
 			System.out.println("Experimental Kanemoke External Console EKEC");
-			System.out.println("By Asim Younas\n");
-			System.out.println("Commands \n\ndetails - get details of connected server");
+			System.out.println("By Asim Younas");
+			System.out.println("\nCommands");
+			System.out.println("\ndetails - get details of connected server");
 			System.out.println("clear - clear the console");
 			System.out.println("list - shows all folder in root folder");
 			System.out.println("mkdir [dir name] - creates a new folder in server");
@@ -236,8 +241,9 @@ public class ExternalConsoleHandler {
 	private void makeDir(String cmd) {
 		String dirName = "F:\\ExternalDir\\";
 		String[] words = cmd.split(" ");
-		new File(dirName+words[1]).mkdir();
-		System.out.println("made new folder '"+words[1]+"'");
+		String name = words[1].replace(" ", "_");
+		new File(dirName+name).mkdir();
+		System.out.println("made new folder '"+name+"'");
 	}
 	
 	private void listDir() {
