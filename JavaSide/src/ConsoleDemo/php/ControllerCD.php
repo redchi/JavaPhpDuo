@@ -40,7 +40,7 @@ Class ControllerCD{
     
     public function javaServerConnect($cmd,$port){
         $PORT = $port; //the port on which we are connecting to the "remote" machine
-        $HOST = "localhost"; //the ip of the remote machine (in this case it's the same machine)
+        $HOST = "192.168.1.19"; //the ip of the remote machine (in this case it's the same machine)
         
         $sock = socket_create(AF_INET, SOCK_STREAM, 0) //Creating a TCP socket
         or die("error: could not create socket\n");
