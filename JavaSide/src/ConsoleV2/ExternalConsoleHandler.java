@@ -3,20 +3,25 @@ package ConsoleV2;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class ExternalConsoleHandler {
 
+	
+	public int port = 1289;
 	private void test() {
 
 
@@ -30,8 +35,14 @@ public class ExternalConsoleHandler {
 	            in = new BufferedReader(new InputStreamReader(
 	                    whatismyip.openStream()));
 	            String ip = in.readLine();
-	            System.out.println("IP:"+ip);
-	          //  return ip;
+	            System.out.println("EKEC Server Started\n");
+	            System.out.println("External IP: "+ip);
+	            Socket socket = new Socket();
+	            socket.connect(new InetSocketAddress("google.com", 80));
+	            String localip = socket.getLocalAddress().toString().replace("/", "");
+	            System.out.println("Local IP: "+localip);
+	            System.out.println("Local Port: "+port+"\n");
+	            socket.close();
 	        } finally {
 	            if (in != null) {
 	                try {
@@ -52,7 +63,7 @@ public class ExternalConsoleHandler {
 	
 	public void startServer() {
 		info();
-	      int port = 1111;
+	      
 	       ServerSocket listenSock = null; //the listening server socket
 	        Socket sock = null;             //the socket that will actually be used for communication
 
@@ -73,6 +84,9 @@ public class ExternalConsoleHandler {
 	               while (stop == false && ((line = br.readLine()) != null)) {
 	            	   String trueCommand = validate(line);
 	            	   String reply = processRequest(trueCommand);
+	            	//   String next = br.readLine();
+	            	//   System.out.println("lding next");
+	            //	   System.out.println("NEXT!!! - "+next);
 	            	  // System.out.println("reply - " +reply );
 //	            	   String lines[] = reply.split("\\r?\\n");
 //	            	   for(String line1:lines) {
@@ -130,7 +144,7 @@ public class ExternalConsoleHandler {
 		
 		
 		// Print some output: goes to your special stream
-		System.out.println(Request);
+		//System.out.println(Request);
 		// Put things back
 		
 		processExternalCommand(Request);
@@ -142,7 +156,7 @@ public class ExternalConsoleHandler {
 
 		String output = baos.toString();
 		// Show what happened
-		System.out.println("got - "+output);
+		//System.out.println("got - "+output);
 		//output = "safksdflk;f\nasdas";
 		String result  = makeJson(output);
 		
@@ -190,24 +204,57 @@ public class ExternalConsoleHandler {
 	private void processExternalCommand(String Request) {
 		switch(Request) {
 		case "help":
-			System.out.println("K A N E M O K E   E X T E R N A L   C O N S O L E");
-			System.out.println("B Y   A S I M   Y O U N A S");
-			System.out.println("- - Commands - - \n details - get current details of machine");
+			System.out.println("Experimental Kanemoke External Console EKEC");
+			System.out.println("By Asim Younas\n");
+			System.out.println("Commands \n\ndetails - get details of connected server");
+			System.out.println("clear - clear the console");
+			System.out.println("list - shows all folder in root folder");
+			System.out.println("mkdir [dir name] - creates a new folder in server");
 		break;
 		
 		case "details":
 			System.out.println("a machine ...........");
 		break;
 		
+		case "list":
+			listDir();
+		break;
 		default:
-			System.out.println("unknown command type 'help' for command list");
+			String[] words = Request.split(" ");
+			if(words[0].equals("mkdir") && words.length == 2) {
+				makeDir(Request);
+			}
+			else {
+				System.out.println("unknown command type 'help' for command list");
+			}
+			
 			
 		}
 
 	}
 	
+	private void makeDir(String cmd) {
+		String dirName = "F:\\ExternalDir\\";
+		String[] words = cmd.split(" ");
+		new File(dirName+words[1]).mkdir();
+		System.out.println("made new folder '"+words[1]+"'");
+	}
 	
-	
+	private void listDir() {
+        String dirName = "F:\\ExternalDir";
+
+        try {
+			Files.list(new File(dirName).toPath())
+			        .limit(99)
+			        .forEach(path -> {
+			        	String pathf = path.toString().replace("F:\\ExternalDir\\", "");
+			            System.out.println(pathf);
+			        });
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 	

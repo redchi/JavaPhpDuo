@@ -1,11 +1,13 @@
 package ConsoleV2;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
 
 public class test {
 
@@ -42,22 +44,28 @@ public class test {
 //           // Thread.sleep(100);
 //       // }
 //		}
+		
+		
 //		catch(Exception e) {
 //			e.printStackTrace();
 //			System.out.println("error");
 //		}
-		try{      
-			Socket s=new Socket("89.242.50.152",1111);  
-			DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
-			dout.writeUTF("Hello Server");  
-			dout.flush();  
-			dout.close();  
-			s.close();  
-			}
-		catch(Exception e){System.out.println(e);}  
+//		try{      
+//			Socket s=new Socket("89.242.50.152",1111);  
+//			DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
+//			dout.writeUTF("Hello Server");  
+//			dout.flush();  
+//			dout.close();  
+//			s.close();  
+//			}
+//		catch(Exception e){System.out.println(e);}  
+//		
+//			  
 		
-			  
-			  
+			//F:\ExternalDir
+			
+
+	     
 	
 	
 	

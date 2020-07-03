@@ -39,7 +39,10 @@ Class ControllerCD{
     }
     
     public function javaServerConnect($cmd,$port){
-        $PORT = $port; //the port on which we are connecting to the "remote" machine
+//         $PORT = 51396; //the port on which we are connecting to the "remote" machine
+//         $HOST = "89.242.50.152"; //the ip of the remote machine (in this case it's the same machine)
+        
+        $PORT = 1289; //the port on which we are connecting to the "remote" machine
         $HOST = "192.168.1.19"; //the ip of the remote machine (in this case it's the same machine)
         
         $sock = socket_create(AF_INET, SOCK_STREAM, 0) //Creating a TCP socket
@@ -47,7 +50,7 @@ Class ControllerCD{
         
         $succ = socket_connect($sock, $HOST, $PORT) //Connecting to to server using that socket
         or die("error: could not connect to host\n");
-        
+      //  echo "sent ->".$cmd."<-\n";
         $text = $cmd; //the text we want to send to the server
         
         socket_write($sock, $text . "\n", strlen($text) + 1) //Writing the text to the socket
@@ -55,9 +58,6 @@ Class ControllerCD{
         
         $reply = socket_read($sock, 10000, PHP_NORMAL_READ) //Reading the reply from socket
         or die("error: failed to read from socket\n");
-        echo $reply;
-        echo"\n ^^ got \n";
-      //  ob_end_clean();
         $output = $this->processJsonForConsole($reply);
         echo $output;
         //echo "\nyeet";
@@ -399,13 +399,12 @@ $(\'.console-input\').on(\'keydown\', function(event) {
         output(result)
       }
     } else {
-       processCommand(cmd);
+       processCommand(text);
     }
   }
 });
 
 function processCommand(cmd){
-  output("sending to server");
    sendCommand(cmd);
 }
 
